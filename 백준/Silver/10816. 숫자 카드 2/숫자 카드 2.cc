@@ -1,5 +1,3 @@
-//카드 개수를 저장한 배열 사용
-
 #include <iostream>
 using namespace std;
 
