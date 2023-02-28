@@ -4,41 +4,35 @@ using namespace std;
 
 string board[102];
 int dist[102][102];
-int dx[4] = {0, 0, -1, 1};
-int dy[4] = {1, -1, 0, 0};
+int dx[4] = {1, -1, 0, 0};
+int dy[4] = {0, 0, 1, -1};
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    
-    int N, M;
-    cin >> N >> M;
-    for (int i = 1; i <= N; i++) {
-        string temp;
-        cin >> temp;
-        board[i] = ' ' + temp;
+int main (){
+    int n, m;
+    cin >> n >> m;
+    for (int i = 0; i < n; i++) {
+        cin >> board[i];
     }
-    
-    //bfs
+
     queue<pair<int, int>> q;
-    dist[1][1] = 1; //visit와 동일한 역할
-    q.push({1, 1});
+    q.push({0, 0});
+    dist[0][0] = 1;
 
     while(!q.empty()) {
-        pair<int, int> cur = q.front();
-        q.pop();
+        pair<int, int> cur = q.front(); q.pop();
 
-        for (int dir = 0; dir < 4; dir++) {
-            int nx = cur.first + dx[dir];
-            int ny = cur.second + dy[dir];
+        for (int i = 0; i < 4; i++) {
+            int nx = cur.first + dx[i];
+            int ny = cur.second + dy[i];
 
-            if (nx < 1 || nx > N || ny < 1 || ny > M) continue;
-            if (dist[nx][ny] > 0 || board[nx][ny] == '0') continue; //이미 방문한 곳
-            dist[nx][ny] = dist[cur.first][cur.second] + 1;
+            if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
+            if (dist[nx][ny] > 0 || board[nx][ny] == '0') continue;
             q.push({nx, ny});
+            dist[nx][ny] = dist[cur.first][cur.second] + 1;
         }
     }
-    cout << dist[N][M];
+
+    cout << dist[n-1][m-1];
 
     return 0;
 }
