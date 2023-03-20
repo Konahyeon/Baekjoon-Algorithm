@@ -2,10 +2,10 @@
 #include <queue>
 using namespace std;
 
-bool vis[502][502];
+int dx[4] = {1, -1, 0, 0};
+int dy[4] = {0, 0, 1, -1};
 int board[502][502];
-int dx[4] = {0, 0, -1, 1};
-int dy[4] = {1, -1, 0, 0};
+int vis[502][502];
 
 int main() {
     ios::sync_with_stdio(0);
@@ -20,39 +20,40 @@ int main() {
         }
     }
 
-    int num = 0;
-    int mx = 0;
+    int picture_count = 0, mx=0;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
-            if (board[i][j] == 0 || vis[i][j]) continue;
-
-            //bfs 새로 시작
-            num++;
-            int width = 0;
+            if (vis[i][j] == 1 || board[i][j] == 0) continue;  //아직 안 곳이면서 가야할 곳인 경우
+            
+            picture_count++;
             queue<pair<int, int>> q;
-            vis[i][j] = true;
-            q.push({i, j});
 
-            while(!q.empty()) {
-                pair<int, int> cur = q.front();
-                q.pop();
+            q.push({i, j});
+            vis[i][j] = 1;
+            int width = 0;
+
+            while(!q.empty()) { 
+                pair<int, int> cur = q.front(); q.pop();
                 width++;
 
-                //cur 기준으로 상하좌우 연결된 정점 queue에 push
                 for (int dir = 0; dir < 4; dir++) {
                     int nx = cur.first + dx[dir];
                     int ny = cur.second + dy[dir];
 
                     if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-                    if (board[nx][ny] == 0 || vis[nx][ny]) continue;
-                    vis[nx][ny] = true;
+                    if (vis[nx][ny] == 1 || board[nx][ny] == 0) continue;
+
                     q.push({nx, ny});
+                    vis[nx][ny] = 1;
+                    
                 }
             }
             mx = max(mx, width);
+        
         }
     }
-    cout << num << '\n' << mx;
+
+    cout << picture_count << '\n' << mx;
 
     return 0;
 }
