@@ -1,7 +1,8 @@
 #include <iostream>
 #include <algorithm>
 using namespace std;
-int table[1000002]; //n이 1이 될 수 있는 데 필요한 연산 횟수 최소값
+
+int D[1000002]; //i를 1로 만드는 최소 연산 횟수
 
 int main() {
     ios::sync_with_stdio(0);
@@ -10,24 +11,17 @@ int main() {
     int n;
     cin >> n;
 
-    table[1] = 0;
-    
-    for (int i = 2; i <= n; i++) {
-        //연산: 1을 뺀다
-        table[i] = table[i-1] + 1;
-
-        //연산: 3으로 나누어 떨어지면, 3으로 나눈다
-        if (i % 3 == 0) {
-            table[i] = min(table[i/3] + 1, table[i]);
+    D[1] = 0, D[2] = 1, D[3] = 1;
+    for (int i = 4; i <= n; i++) {
+        D[i] = D[i-1] + 1; //Case 3. 1을 뺀다
+        if (i % 3 == 0) { //Case 1. 3으로 나눈다
+            D[i] = min(D[i], D[i/3] + 1);
         }
-
-        //연산: 2로 나누어 떨어지면, 2로 나눈다
-        if (i % 2 == 0) {
-            table[i] = min(table[i/2] + 1, table[i]);
+        if (i % 2 == 0) { //Case 2. 2로 나눈다
+            D[i] = min(D[i], D[i/2] + 1);
         }
     }
-
-    cout << table[n];
+    cout << D[n];
 
     return 0;
 }
