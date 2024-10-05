@@ -1,29 +1,35 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
 using namespace std;
 
+pair<int, int> p[100002];
+
 int main() {
-	int N, start, end, pre_start, pre_end, cnt=1;
-	cin >> N;
-	vector<pair<int, int>> v;
+    ios::sync_with_stdio(0);
+    cin.tie(0);
 
-	for (int i = 0; i < N; i++) {
-	cin >> start >> end;
-		v.push_back({ end, start }); //pair의 sort는 first, second 순이기에 순서 바꿈
-	}
-	sort(v.begin(), v.end()); //일찍 끝나는 순서대로 정렬
+    int n;
+    cin >> n;
 
-	pre_end = v[0].first; //이전 회의 끝나는 시간
-	pre_start = v[0].second; //이전 회의 시작 시간 
-	for (int i = 1; i < N; i++) {
-		if (pre_end <= v[i].second) { //이전 회의 끝나는 시간보다 v[i]의 회의 시작 시간이 크면
-			pre_start = v[i].second;
-			pre_end = v[i].first;
-			cnt++;
-		}
-	}
-	cout << cnt << "\n";
+    for (int i = 0; i < n; i++) {
+        cin >> p[i].second >> p[i].first;
+    }
 
-	return 0;
+    sort(p, p+n);
+
+    int answer = 1;
+    int start_time = p[0].second;
+    int end_time = p[0].first;
+    for (int i = 1; i < n; i++) {
+        if (p[i].second >= end_time) { //end_time보다 시작 시간이 크거나 같으면
+            answer++;
+            start_time = p[i].second;
+            end_time = p[i].first;
+        }
+    }
+
+    cout << answer;
+
+
+    return 0;
 }
